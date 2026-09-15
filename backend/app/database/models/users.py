@@ -38,7 +38,7 @@ class User(Base):
         nullable=True
     )
 
-    messages = Mapped[list['Messages']] = relationship(
+    messages: Mapped[list['Messages']] = relationship(
         "Messages",
         back_populates="message_owner"
     )

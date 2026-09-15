@@ -9,7 +9,6 @@ from app.database.database import Base
 
 if TYPE_CHECKING:
     from app.database.models.users import User
-    from app.database.models.images import Images
 
 
 class Messages(Base):
@@ -35,10 +34,6 @@ class Messages(Base):
     message_owner: Mapped['User'] = relationship(
         "User",
         back_populates="messages"
-    )
-    image_sender: Mapped[list['Images']] = relationship(
-        "Images",
-        back_populates="images"
     )
 
 
