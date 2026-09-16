@@ -7,7 +7,7 @@ from app.database.database import Base
 
 
 if TYPE_CHECKING:
-    from app.database.models.users import User
+    from app.database.models.messages import Messages
 
 
 
@@ -15,13 +15,18 @@ class Images(Base):
     __tablename__ = "images"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    sender_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    image_url: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False
+    message_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "messages.id",
+            ondelete="CASCADE"
+        ),
     )
+    image_url: Mapped[str] = mapped_column(String(255))
 
-    user: Mapped["User"] = relationship("User")
+    owner: Mapped["Messages"] = relationship(
+        "Messages",
+        back_populates="image_message"
+    )
 
 
 
