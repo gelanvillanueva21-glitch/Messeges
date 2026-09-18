@@ -23,6 +23,7 @@ async def register(
     repo: UserRepoDeps
 ):
     try:
+        print("hello world!")
         result = repo.create(data)
         if not result:
             raise ValueError()

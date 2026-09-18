@@ -1,7 +1,10 @@
 
 
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
+
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
 
 class DatabaseSettings(BaseSettings):
@@ -16,15 +19,10 @@ class AuthSettings(BaseSettings):
 
 class Settings(DatabaseSettings, AuthSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_PATH,
         extra="ignore"
     )
 
 
-@lru_cache
-def get_settigs():
-    return Settings()
-
-
-settings = get_settigs()
+settings = Settings()
 
