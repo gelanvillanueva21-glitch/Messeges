@@ -1,12 +1,11 @@
 
 
 from fastapi import APIRouter, Depends, Response, HTTPException, status, Body
-from typing import Annotated
 
 
 from app.config.security import create_access_token, verify_password
 from app.schemas.user_schema import UserResponse, UserCreate, UserLogin, ChangePassword
-from app.utils.depends import UserRepoDeps, DatabaseDepends, CurrentUserDeps
+from app.utils.depends import UserRepoDeps, DatabaseDepends, CurrentUserDeps, UserServDeps
 
 
 route = APIRouter(prefix="/auth", tags=["auth"])
@@ -20,12 +19,10 @@ route = APIRouter(prefix="/auth", tags=["auth"])
 async def register(
     data: UserCreate,
     db: DatabaseDepends,
-    repo: UserRepoDeps
+    service: UserServDeps
 ):
     try:
-        result = await repo.create(data)
-        await db.commit()
-        await db.refresh(result)
+        result = await service.register(data)
         return result
     except ValueError as e:
         await db.rollback()
@@ -67,10 +64,11 @@ async def change_password(
 async def login(
     response: Response,
     data: UserLogin,
-    repo: UserRepoDeps
+    service: UserServDeps
 ):
-    user = await repo.get_by_username(data.username)
-    if not user or not verify_password(data.password, user.hashed_password):
+    try:
+        user = await service.check_account(data)
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect password or email."
