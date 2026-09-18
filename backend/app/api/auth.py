@@ -23,18 +23,18 @@ async def register(
     repo: UserRepoDeps
 ):
     try:
-        print("hello world!")
-        result = repo.create(data)
-        if not result:
-            raise ValueError()
+        result = await repo.create(data)
         await db.commit()
+        await db.refresh(result)
         return result
-    except ValueError:
+    except ValueError as e:
+        await db.rollback()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Account username already exist."
+            detail=str(e) or "Account username already exist."
         )
     except Exception:
+        await db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create account"
@@ -45,18 +45,21 @@ async def register(
 @route.post("/change_password")
 async def change_password(
     data: ChangePassword,
+    db: DatabaseDepends,
     repo: UserRepoDeps
 ):
     try:
-        result = await repo.change_password(
+        await repo.change_password(
             data.new_password, 
             data.id
         )
+        await db.commit()
         return {"status": "success"}
     except Exception:
+        await db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to chagne password."
+            detail="Failed to change password."
         )
 
 
@@ -76,7 +79,7 @@ async def login(
     Created token then stores it through
     Http only cookies.
     """
-    access_token = create_access_token(data={"sub": str(user.id3)})
+    access_token = create_access_token(data={"sub": str(user.id)})
     response.set_cookie(
         key="access_token",
         value=access_token,

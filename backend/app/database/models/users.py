@@ -26,7 +26,7 @@ class User(Base):
     )
     full_name: Mapped[str] = mapped_column(
         String(255),
-        nullable=False
+        nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -38,9 +38,15 @@ class User(Base):
         nullable=True
     )
 
-    messages: Mapped[list['Messages']] = relationship(
+    sent_messages: Mapped[list['Messages']] = relationship(
         "Messages",
-        back_populates="message_owner"
+        foreign_keys="Messages.sender_id",
+        back_populates="sender"
+    )
+    received_messages: Mapped[list['Messages']] = relationship(
+        "Messages",
+        foreign_keys="Messages.receiver_id",
+        back_populates="receiver"
     )
 
 

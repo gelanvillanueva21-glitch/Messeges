@@ -47,8 +47,8 @@ class MessageRepo:
         result = await self.database.execute(
             select(Messages).where(
                 or_(
-                    (Messages.sender_id == data.user_id) & (Messages.receiver_id == data.reciever_id),
-                    (Messages.sender_id == data.reciever_id) & (Messages.receiver_id == data.user_id)
+                    (Messages.sender_id == data.user_id) & (Messages.receiver_id == data.receiver_id),
+                    (Messages.sender_id == data.receiver_id) & (Messages.receiver_id == data.user_id)
                 )
             ).order_by(Messages.message_at.asc())
         )

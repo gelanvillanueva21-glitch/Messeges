@@ -30,9 +30,15 @@ class Messages(Base):
     )
     message: Mapped[Optional[str]] = mapped_column(String)
 
-    message_owner: Mapped['User'] = relationship(
+    sender: Mapped['User'] = relationship(
         "User",
-        back_populates="messages"
+        foreign_keys=[sender_id],
+        back_populates="sent_messages"
+    )
+    receiver: Mapped['User'] = relationship(
+        "User",
+        foreign_keys=[receiver_id],
+        back_populates="received_messages"
     )
     image_message: Mapped['Images'] = relationship(
         'Images',

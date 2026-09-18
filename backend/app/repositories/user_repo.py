@@ -32,7 +32,10 @@ class UserRepo:
         return result.scalar_one_or_none()
 
 
-    def create(self, data: UserCreate) -> User:
+    async def create(self, data: UserCreate) -> User:
+        existing = await self.get_by_username(data.username)
+        if existing:
+            raise ValueError("Account username already exist.")
         user = User(
             username = data.username,
             hashed_password = hash_password(data.password),

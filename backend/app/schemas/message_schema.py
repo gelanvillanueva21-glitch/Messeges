@@ -17,6 +17,6 @@ class MessagesResponse(Message):
 
 
 class MessageData(BaseModel):
-    user_id: str
-    reciever_id: str
+    user_id: int
+    receiver_id: int
 
