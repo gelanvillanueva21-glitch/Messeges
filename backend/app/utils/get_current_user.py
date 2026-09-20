@@ -5,14 +5,14 @@ from fastapi import Request, HTTPException, status, Depends
 from jose import jwt, JWTError
 
 from app.repositories.user_repo import UserRepo
-from app.utils.depends import UserRepoDeps
+from app.utils.get_repositories import get_user_repo
 from app.database.models.users import User
 from app.config.config import settings
 
 
 async def get_current_user(
     request: Request,
-    repo: UserRepoDeps
+    repo: Annotated[UserRepo, Depends(get_user_repo)]
 ) -> User:
     """
     A function that checks the cookie on

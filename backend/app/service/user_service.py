@@ -35,10 +35,10 @@ class UserService:
     async def check_account(
         self,
         data: UserLogin
-    ) -> None:
+    ) -> User:
         user = await self.repo.get_by_username(data.username)
         if not user or not verify_password(data.password, user.hashed_password):
             raise ValueError()
-        return
+        return user
 
 
