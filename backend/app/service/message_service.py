@@ -23,13 +23,33 @@ class MessageService:
         receiver_id: int,
         content: str | None = None,
         image_url: str | None = None
-    ):
+    ) -> None:
         if content:
-            # Block of code
-            pass
+            msg_result = self.repo.message_user(data=(
+                content,
+                sender_id,
+                receiver_id
+            ))
         if image_url:
-            # Block of code
-            pass
-        
+            img_result = self.repo.message_image(
+                image_url,
+                sender_id
+            )
+        await self.database.commit()
 
+
+    async def get_messages(
+        self,
+        user_id: int,
+        receiver_id: int
+    ):
+        result = await self.repo.get_all_messages((
+            user_id,
+            receiver_id
+        ))
+        output_list = []
+        for info in result:
+            if info.sender_id == user_id:
+                output_list.append({})
+        return output_list
 
