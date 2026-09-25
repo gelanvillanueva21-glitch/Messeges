@@ -42,7 +42,7 @@ def create_access_token(
         expires = datetime.now(timezone.utc) + expires_delta
     else:
         # Creates a calculation expiration for cookie
-        expires = datetime.now() + timedelta(hours=settings.ACCESS_TOKEN_EXPIRE_HOURS)
+        expires = datetime.now() + timedelta(hours=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expires})
     return jwt.encode(
         to_encode,

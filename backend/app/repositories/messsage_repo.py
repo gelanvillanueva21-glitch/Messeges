@@ -45,7 +45,7 @@ class MessageRepo:
     async def get_all_messages(
         self,
         data: MessageData
-    ):
+    ) -> list[Message]:
         result = await self.database.execute(
             select(Messages).where(
                 or_(
@@ -53,7 +53,12 @@ class MessageRepo:
                     (Messages.sender_id == data.receiver_id) & (Messages.receiver_id == data.user_id)
                 )
             ).order_by(Messages.message_at.asc())
+            .limit(50)
         )
+        if data.message_id:
+            result = result.where(
+                Messages.id < data.message_id
+            )
         return result.scalars().all()
 
 
@@ -61,5 +66,6 @@ class MessageRepo:
         result = await self.database.execute(
             select(User)
         )
+        print("I Love her")
         return result.scalars().all()
 

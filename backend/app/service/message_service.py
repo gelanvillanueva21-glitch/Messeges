@@ -47,11 +47,7 @@ class MessageService:
             user_id,
             receiver_id
         ))
-        output_list = []
-        for info in result:
-            if info.sender_id == user_id:
-                output_list.append({})
-        return output_list
+        return result
 
 
     async def get_user_available(self, id: int):
@@ -65,6 +61,7 @@ class MessageService:
                     "profile_url": info.profile_url,
                     "created_at": info.created_at
                 })
+        print("world!")
         return output
 
 

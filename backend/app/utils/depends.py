@@ -14,7 +14,7 @@ from app.utils.get_current_user import get_current_user
 
 
 from app.utils.get_repositories import get_user_repo, get_msg_repo
-from app.utils.get_services import get_user_service, get_msg_repo
+from app.utils.get_services import get_user_service, get_msg_service
 
 
 from app.service.user_service import UserService
@@ -31,10 +31,16 @@ from app.service.message_service import MessageService
 DatabaseDepends = Annotated[AsyncSession, Depends(get_database)]
 CurrentUserDeps = Annotated[User, Depends(get_current_user)]
 
+
+
+
 # Repositories Dependencies
 UserRepoDeps = Annotated[UserRepo, Depends(get_user_repo)]
 MsgRepoDebs = Annotated[MessageRepo, Depends(get_msg_repo)]
 
+
+
+
 # Services Dependencies
 UserServDeps = Annotated[UserService, Depends(get_user_service)]
-MsgServDeps = Annotated[MessageService, Depends(get_msg_repo)]
+MsgServDeps = Annotated[MessageService, Depends(get_msg_service)]

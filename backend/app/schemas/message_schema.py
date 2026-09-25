@@ -18,4 +18,5 @@ class MessagesResponse(Message):
 class MessageData(BaseModel):
     user_id: int
     receiver_id: int
+    message_id: int | None = None
 
