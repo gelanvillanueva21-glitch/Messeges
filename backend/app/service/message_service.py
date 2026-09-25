@@ -53,3 +53,18 @@ class MessageService:
                 output_list.append({})
         return output_list
 
+
+    async def get_user_available(self, id: int):
+        result = await self.repo.get_all_users()
+        output = []
+        for info in result:
+            if id != info.id:
+                output.append({
+                    "full_name": info.full_name,
+                    "user_id": info.id,
+                    "profile_url": info.profile_url,
+                    "created_at": info.created_at
+                })
+        return output
+
+

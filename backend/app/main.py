@@ -9,7 +9,8 @@ from fastapi import FastAPI
 
 
 # Routes
-from app.api.auth import route as auth_routh
+from app.api.auth import route as auth_route
+from app.api.message import router as message_route
 
 
 app = FastAPI(title="Simple-Messenger")
@@ -17,6 +18,7 @@ app = FastAPI(title="Simple-Messenger")
 
 
 
-app.include_router(auth_routh)
+app.include_router(auth_route)
+app.include_router(message_route)
 
 

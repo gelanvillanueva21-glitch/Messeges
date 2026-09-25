@@ -4,9 +4,11 @@ from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
+from app.database.models.users import User
 from app.database.models.messages import Messages
 from app.database.models.images import Images
 from app.schemas.message_schema import Message, MessageData
+
 
 
 class MessageRepo:
@@ -54,4 +56,10 @@ class MessageRepo:
         )
         return result.scalars().all()
 
+
+    async def get_all_users(self) -> list[User]:
+        result = await self.database.execute(
+            select(User)
+        )
+        return result.scalars().all()
 

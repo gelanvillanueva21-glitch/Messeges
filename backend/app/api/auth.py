@@ -42,13 +42,14 @@ async def register(
 @route.post("/change_password")
 async def change_password(
     data: ChangePassword,
+    user: CurrentUserDeps,
     db: DatabaseDepends,
     repo: UserRepoDeps
 ):
     try:
         await repo.change_password(
             data.new_password, 
-            data.id
+            user.id
         )
         await db.commit()
         return {"status": "success"}
