@@ -46,6 +46,13 @@ class Messages(Base):
         cascade="all, delete-orphan"
     )
 
+    @property
+    def image_url(self) -> str | None:
+        if self.image_message:
+            return self.image_message.image_url
+        return None
+
+
 
 
 
