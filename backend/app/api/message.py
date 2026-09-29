@@ -31,7 +31,10 @@ async def message_request(
                 if isinstance(body, dict):
                     content = body.get("content") or body.get("message")
             except Exception:
-                pass
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid JSON body."
+                )
 
     try:
         saved_image = save_file(image)
@@ -113,3 +116,20 @@ async def get_user_available(
             detail="Failed to fetch. Please try again later."
         )
 
+
+async def search_user(
+    name: Annotated[str, Query(...)],
+    user: CurrentUserDeps,
+    service: MsgServDeps
+):
+    try:
+        result = await service.get_searched_user(name)
+        return {
+            "status": "success",
+            "data": result
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to search user. Please try again later."
+        )

@@ -99,4 +99,17 @@ class MessageService:
         return output
 
 
+    async def get_searched_user(self, name: str):
+        result = await self.repo.search(name)
+        output = []
+        for info in result:
+            output.append({
+                "full_name": info.full_name,
+                "user_id": info.id,
+                "profile_url": info.profile_url,
+                "created_at": info.created_at
+            })
+        return output
+
+
 

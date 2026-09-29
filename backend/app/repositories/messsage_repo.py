@@ -78,3 +78,12 @@ class MessageRepo:
         return list(result.scalars().all())
 
 
+    async def search(self, name: str) -> list[User]:
+        result = await self.database.execute(
+            select(User)
+            .where(
+                User.full_name.ilike(f"%{name}%")
+            )
+        )
+        return list(result.scalars().all())
+
