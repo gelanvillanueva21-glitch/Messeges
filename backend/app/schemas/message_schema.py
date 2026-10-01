@@ -27,3 +27,12 @@ class MessageData(BaseModel):
     message_id: int | None = None
 
 
+class MessageSearchResponse(BaseModel):
+    full_name: str
+    user_id: int
+    profile_url: str | None = None
+    created_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+

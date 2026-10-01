@@ -70,6 +70,26 @@ async def message_request(
 
 
 
+@router.post("/search")
+async def search_user(
+    name: Annotated[str, Query(...)],
+    service: MsgServDeps,
+    db: DatabaseDepends
+):
+    try:
+        result = await service.get_searched_user(name)
+        return {
+            "status": "success",
+            "data": result
+        }
+    except Exception:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to search user. Please try again later."
+        )
+
+
 @router.get("/user/{receiver_id}")
 async def get_messages(
     user: CurrentUserDeps,
@@ -117,19 +137,5 @@ async def get_user_available(
         )
 
 
-async def search_user(
-    name: Annotated[str, Query(...)],
-    user: CurrentUserDeps,
-    service: MsgServDeps
-):
-    try:
-        result = await service.get_searched_user(name)
-        return {
-            "status": "success",
-            "data": result
-        }
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to search user. Please try again later."
-        )
+
+

@@ -3,7 +3,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models.messages import Messages
-from app.schemas.message_schema import Message, MessageData, MessagesResponse
+from app.schemas.message_schema import Message, MessageData, MessagesResponse, MessageSearchResponse
 from app.repositories.messsage_repo import MessageRepo
 from app.repositories.user_repo import UserRepo
 
@@ -101,15 +101,15 @@ class MessageService:
 
     async def get_searched_user(self, name: str):
         result = await self.repo.search(name)
-        output = []
-        for info in result:
-            output.append({
-                "full_name": info.full_name,
-                "user_id": info.id,
-                "profile_url": info.profile_url,
-                "created_at": info.created_at
-            })
-        return output
+        return [
+            MessageSearchResponse(
+                full_name=info.full_name,
+                user_id=info.id,
+                profile_url=info.profile_url,
+                created_at=info.created_at
+            )
+            for info in result
+        ]
 
 
 

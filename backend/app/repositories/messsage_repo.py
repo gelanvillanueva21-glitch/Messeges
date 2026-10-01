@@ -83,7 +83,8 @@ class MessageRepo:
             select(User)
             .where(
                 User.full_name.ilike(f"%{name}%")
-            )
+            ).order_by(User.full_name.asc())
+            .limit(50)
         )
         return list(result.scalars().all())
 
