@@ -51,10 +51,7 @@ async def message_request(
             content=content,
             image_url=saved_image
         )
-        return {
-            "status": "success",
-            "data": result
-        }
+        return { "data": result }
     except ValueError as e:
         await db.rollback()
         raise HTTPException(
@@ -78,10 +75,7 @@ async def search_user(
 ):
     try:
         result = await service.get_searched_user(name)
-        return {
-            "status": "success",
-            "data": result
-        }
+        return { "data": result }
     except Exception:
         await db.rollback()
         raise HTTPException(
@@ -104,10 +98,7 @@ async def get_messages(
             receiver_id=receiver_id,
             message_id=message_id
         )
-        return {
-            "status": "success",
-            "message": result
-        }
+        return { "data": result }
     except Exception:
         await db.rollback()
         raise HTTPException(
@@ -125,10 +116,7 @@ async def get_user_available(
 ):
     try:
         result = await service.get_user_available(user.id)
-        return {
-            "status": "success",
-            "accounts": result
-        }
+        return { "accounts": result }
     except Exception:
         await db.rollback()
         raise HTTPException(
